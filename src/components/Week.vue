@@ -2,16 +2,12 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-20 19:48:05
+ * @LastEditTime: 2019-09-21 17:05:25
  * @LastEditors: Please set LastEditors
  -->
 <template>
     <div class="week">
-         {{getDaysOfMonth(8, 2019)}}
-         {{currentDate.getMonth()}}
-         {{currentDate.getDay()}}
-         {{currentDate}}
-        <div v-for="(it,index) in calendarList" :key="index">{{it}} </div>
+        <button  v-for="(it,index) in calendarList" :key="index"  class="date">{{it}}</button>
     </div>
     
 </template>
@@ -87,4 +83,15 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .date {
+        width: 14vw;
+        outline: none;
+        background-color: antiquewhite;
+        height: 10vh;
+    }
+    .date:hover {
+        background-color: aquamarine;
+    }
+</style>
 

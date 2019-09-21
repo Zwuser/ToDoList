@@ -1,28 +1,29 @@
+<!--
+ * @Description: In User Settings Edit
+ * @Author: your name
+ * @Date: 2019-09-19 21:23:30
+ * @LastEditTime: 2019-09-21 16:50:37
+ * @LastEditors: Please set LastEditors
+ -->
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Button></Button>
+    <week></week>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
+import week from "./components/Week.vue" 
+import Button from "./components/Button.vue"  
 export default {
-  name: 'app',
-  components: {
-    HelloWorld
-  }
+    components:{
+   week,
+   Button
+ },
+  name: 'App'
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>
