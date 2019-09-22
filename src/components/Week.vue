@@ -2,96 +2,132 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-21 17:05:25
+ * @LastEditTime: 2019-09-22 21:37:44
  * @LastEditors: Please set LastEditors
  -->
 <template>
     <div class="week">
-        <button  v-for="(it,index) in calendarList" :key="index"  class="date">{{it}}</button>
+        <btn @nextMonth='next' @preMonth='pre'></btn>
+        <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
+        <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '']">{{it.date}}</button>
     </div>
     
 </template>
 <script>
+import btn from './Button.vue'
+
 export default {
+    components: {
+        btn
+    },
     data() {
         return {
-          currentDate: new Date(),
-          calendarList: [] 
+          currentDate: {},
+          calendarList: [],
+          shareDate: new Date(),
+          dateforCalendar: ['一', '二', '三', '四', '五', '六', '日']
         };
     },
     methods: {
-        createCaledarList() {
-            let month = this.currentDate.getMonth();
-            let date = this.currentDate.getDate();
-            let year = this.currentDate.getFullYear();
-            let day = this.currentDate.getDay();
-            day = this.correctDay(day);
-            let fristDay = this.getDayOfFristDay(date,day);
-            // let lastDay = this.getDayOfLastDay();
-            let days = 0;
-            if(month === 1) {
-                days = this.getDaysOfMonth(12, year - 1);
-            } else {
-                days = this.getDaysOfMonth(month - 1, year);
-            }
-            for(let i = fristDay-1; i>=1; i--) {
-                this.calendarList.push(days-i + 1);  
-            }
-            for(let i = 1;i<=this.getDaysOfMonth(month, year); i++) {
-                this.calendarList.push(i);
-            }
-            for(let i = 1; this.calendarList.length <42; i++) {
-                this.calendarList.push(i);
-            }
+        pre() {
+            this.currentDate.month--;
+            this.correctCurrent();
+            this.calendarCreator();
+            alert('1');
         },
-         getDaysOfMonth(month,year) {
-            let monthFornonLeapYear = [31,28,31,30,31,30,31,31,30,31,30,31];
-            if((year%4 === 0 && year%100 !== 0) || year%400 === 0) {
-                if(month === 2) {
-                    return 29;
-                } else {
-                    return monthFornonLeapYear[month];
-                }
-            } else {
-                return monthFornonLeapYear[month];
-            }
+        next() {
+            this.currentDate.month--;
+            this.correctCurrent();
+            this.calendarCreator();  
+            alert('-1');
         },
-        getDayOfFristDay(date,day) {
-             if((day - (date - 1)) % 7 <= 0) {
-                 return (day-(date - 1)) %7 +7;
-             } else {
-                 return day - (date - 1) %7;
-             }
+        init() {
+            this.setCurrent();
+            this.calendarCreator();
         },
-        getDayOfLastDay(date,day,dayOfMonth) {
-            if((day+(dayOfMonth - date)) % 7 === 0) {
-                return day;
-            } else {
-                return (day+(dayOfMonth - date)) % 7;
-            }
+        getDaysByMonth(year,month) {
+            return new Date(year, month + 1, 0).getDate();
         },
-        correctDay(day) {
-            if(day === 0) {
-                return 7;
-            } else {
-                return day;
+        setCurrent(d = new Date()) {
+            let year = d.getFullYear();
+            let month = d.getMonth();
+            let date = d.getDate();
+            this.currentDate = {
+                year, month, date
+            };
+        },
+        correctCurrent() {
+            let {year, month, date} = this.currentDate;
+            let maxDate = this.getDaysByMonth(year, month);
+            date = Math.min(maxDate, date);
+            let instance = new Date(year, month, date);
+            this.setCurrent(instance);
+        },
+        calendarCreator() {
+            const oneDayMS = 24 * 60 * 60 * 1000;
+            let list = [];
+            let {year, month} = this.currentDate;
+            let firstDay = this.getFirstDayByMonth(year, month);
+            let prefixDay = firstDay === 0 ? 6 : firstDay - 1;
+            let begin = new Date(year, month, 1).getTime() - (oneDayMS * prefixDay);
+            let lastDay = this.getLastDayByMonth(year, month);
+            let suffixDay = lastDay === 0 ? 0 : 7 - lastDay;
+            let end = new Date(year, month + 1, 0).getTime() + (oneDayMS * suffixDay);
+            while(begin <= end) {
+                this.shareDate.setTime(begin);
+                let year = this.shareDate.getFullYear();
+                let curMonth = this.shareDate.getMonth();
+                let date = this.shareDate.getDate();
+                list.push({
+                    year: year,
+                    month: curMonth,
+                    date: date,
+                    disable: curMonth !== month
+                });
+                begin += oneDayMS;
             }
+            this.calendarList = list;
+        },
+        getFirstDayByMonth(year, month) {
+            return new Date(year, month, 1).getDay();
+        },
+        getLastDayByMonth(year, month) {
+            return new Date(year, month + 1, 0).getDay();
         }
     },
-    mounted: function() {
-        this.createCaledarList();
+    mounted() {
+        this.init();
     }
 }
 </script>
 <style scoped>
-    .date {
-        width: 14vw;
+    .day {
+        width: 12vw;
         outline: none;
         background-color: antiquewhite;
         height: 10vh;
+        margin: 5px;
+        border: none;
     }
-    .date:hover {
+    .day:hover {
         background-color: aquamarine;
+    }
+    .day:focus {
+        background-color: blue;
+    }
+    .date {
+        display: inline-block;
+        width: 12vw;
+        text-align: center;
+        height: 6vh;
+        line-height: 6vh;
+        margin: 5px;
+    }
+    .week {
+        margin: auto;
+    }
+    .disable {
+        background-color: gainsboro;
     }
 </style>
 

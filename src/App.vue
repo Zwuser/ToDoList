@@ -2,28 +2,27 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 21:23:30
- * @LastEditTime: 2019-09-21 16:50:37
+ * @LastEditTime: 2019-09-22 16:24:08
  * @LastEditors: Please set LastEditors
  -->
 <template>
   <div id="app">
-    <Button></Button>
     <week></week>
   </div>
 </template>
 
 <script>
-import week from "./components/Week.vue" 
-import Button from "./components/Button.vue"  
+import week from "./components/Week.vue"  
 export default {
     components:{
-   week,
-   Button
+   week
  },
   name: 'App'
 }
 </script>
 
-<style>
-
+<style scoped>
+  #app {
+    margin: auto;
+  }
 </style>

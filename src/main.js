@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 21:04:24
- * @LastEditTime: 2019-09-20 14:54:22
+ * @LastEditTime: 2019-09-22 14:29:26
  * @LastEditors: Please set LastEditors
  */
 import Vue from 'vue'
@@ -17,7 +17,9 @@ Vue.config.productionTip = false
 Vue.use(router);
 const Router = new router({
   routes: routes
-})
+});
+
+
 
 new Vue({
   Router,
