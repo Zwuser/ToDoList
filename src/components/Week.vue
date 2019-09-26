@@ -2,14 +2,16 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-22 21:37:44
+ * @LastEditTime: 2019-09-25 12:16:52
  * @LastEditors: Please set LastEditors
  -->
 <template>
     <div class="week">
-        <btn @nextMonth='next' @preMonth='pre'></btn>
+        <btn @nextmonth='next' @premonth='pre'></btn>
+        <div>{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
         <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
         <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '']">{{it.date}}</button>
+        {{currentDate}}
     </div>
     
 </template>
@@ -33,13 +35,13 @@ export default {
             this.currentDate.month--;
             this.correctCurrent();
             this.calendarCreator();
-            alert('1');
+            this.$router.push({name:'data',params:{year:this.currentDate.year, month: this.currentDate.month + 1}});
         },
         next() {
-            this.currentDate.month--;
+            this.currentDate.month++;
             this.correctCurrent();
             this.calendarCreator();  
-            alert('-1');
+            this.$router.push({name:'data',params:{year:this.currentDate.year,month: this.currentDate.month + 1}});
         },
         init() {
             this.setCurrent();
