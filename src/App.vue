@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 21:23:30
- * @LastEditTime: 2019-09-25 11:38:12
+ * @LastEditTime: 2019-09-26 19:41:37
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -12,8 +12,7 @@
 </template>
 
 <script>  
-export default {
-    
+export default { 
   name: 'App'
 }
 </script>
