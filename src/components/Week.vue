@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-25 12:16:52
+ * @LastEditTime: 2019-09-27 15:11:13
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -10,8 +10,7 @@
         <btn @nextmonth='next' @premonth='pre'></btn>
         <div>{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
         <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
-        <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '']">{{it.date}}</button>
-        {{currentDate}}
+        <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '', (it.year === new Date().getFullYear() && it.month === new Date().getMonth() && it.date === new Date().getDate()) ? 'today': '']">{{it.date}}</button>
     </div>
     
 </template>
@@ -97,8 +96,14 @@ export default {
             return new Date(year, month + 1, 0).getDay();
         }
     },
+    compute: {
+
+    },
     mounted() {
         this.init();
+        this.$router.push({name: 'data', params: {
+            year: new Date().getFullYear(),month: new Date().getMonth() + 1
+        }});
     }
 }
 </script>
@@ -130,6 +135,10 @@ export default {
     }
     .disable {
         background-color: gainsboro;
+    }
+    .today {
+        border-radius: 2vw;
+        background-color: cyan;
     }
 </style>
 
