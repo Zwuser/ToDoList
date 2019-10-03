@@ -2,21 +2,25 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-27 21:25:32
+ * @LastEditTime: 2019-10-04 12:04:32
  * @LastEditors: Please set LastEditors
  -->
 <template>
     <div class="week">
         <btn @nextmonth='next' @premonth='pre'></btn>
         <div>{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
+        <template v-if="events.length !== 0"><div v-for="(event,index) in events" :key="index">标题：{{event.name}}  备注：{{event.remark}}</div></template>
+        <template v-else><p>今日无事件</p></template>
         <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
-        <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '', (it.year === new Date().getFullYear() && it.month === new Date().getMonth() && it.date === new Date().getDate()) ? 'today': '']">{{it.date}}</button>
+        <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '', (it.year === new Date().getFullYear() && it.month === new Date().getMonth() && it.date === new Date().getDate()) ? 'today': '']" @click="setData(it)">{{it.date}}</button>
+        <br>
+        <el-button icon="el-icon-plus" @click="addlist"></el-button> 
     </div>
     
 </template>
 <script>
 import btn from './Button.vue'
-
+import axios from 'axios';
 export default {
     components: {
         btn
@@ -26,10 +30,19 @@ export default {
           currentDate: {},
           calendarList: [],
           shareDate: new Date(),
-          dateforCalendar: ['一', '二', '三', '四', '五', '六', '日']
+          dateforCalendar: ['一', '二', '三', '四', '五', '六', '日'],
+          activeDate: {year: new Date().getFullYear(),
+                       month: new Date().getMonth(),
+                       date: new Date().getDate()
+                      },
+          events: []
+                
         };
     },
     methods: {
+        addlist(){
+            this.$router.push({path:'/addList'});
+        },
         pre() {
             this.currentDate.month--;
             this.correctCurrent();
@@ -94,16 +107,37 @@ export default {
         },
         getLastDayByMonth(year, month) {
             return new Date(year, month + 1, 0).getDay();
+        },
+        setData(it) {
+            this.activeDate = it;
+        },
+        compute(obj) {
+            let year = obj.year;
+            let month = obj.month;
+            let date = obj.date;
+            let Date = '' + year + month + date;
+            return Date;
         }
     },
-    computed: {
-
+    watch: {
+        'activeDate'() {
+            let Date = this.compute(this.activeDate);
+            axios.get('http://localhost:3000/' + Date)
+                 .then(res => {
+                     this.events = res.data;
+                 });
+        }
     },
     mounted() {
         this.init();
         this.$router.push({name: 'data', params: {
             year: new Date().getFullYear(),month: new Date().getMonth() + 1
         }});
+        let date = this.compute(this.currentDate);
+        axios.get('http://localhost:3000/' + date)
+             .then( res => {
+                 this.events = res.data;
+             });
     }
 }
 </script>
