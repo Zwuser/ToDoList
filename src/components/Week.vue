@@ -2,7 +2,7 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:18:30
- * @LastEditTime: 2019-09-27 15:11:13
+ * @LastEditTime: 2019-09-27 21:25:32
  * @LastEditors: Please set LastEditors
  -->
 <template>
@@ -96,7 +96,7 @@ export default {
             return new Date(year, month + 1, 0).getDay();
         }
     },
-    compute: {
+    computed: {
 
     },
     mounted() {
