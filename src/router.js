@@ -6,7 +6,9 @@
  * @LastEditors: Please set LastEditors
  */
 import week from './components/Week.vue';
+import ToDoList from './components/ToDoList.vue'
 export const routes = [
     {path:'/',component:week},
-    {path:'/:year/:month',name:'data',component: week}
+    {path:'/:year/:month',name:'data',component: week},
+    {path:'/addList',component:ToDoList}
 ]

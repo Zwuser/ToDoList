@@ -11,6 +11,8 @@
         <div>{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
         <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
         <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '', (it.year === new Date().getFullYear() && it.month === new Date().getMonth() && it.date === new Date().getDate()) ? 'today': '']">{{it.date}}</button>
+        <br>
+        <el-button icon="el-icon-plus" v-on:click="addlist"></el-button> 
     </div>
     
 </template>
@@ -30,6 +32,9 @@ export default {
         };
     },
     methods: {
+        addlist(){
+            this.$router.push({path:'/addList'});
+        },
         pre() {
             this.currentDate.month--;
             this.correctCurrent();
