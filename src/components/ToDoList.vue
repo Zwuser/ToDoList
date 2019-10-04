@@ -2,16 +2,17 @@
  * @Description: In User Settings Edit
  * @Author: your name
  * @Date: 2019-09-19 22:15:07
- * @LastEditTime: 2019-09-19 22:15:07
- * @LastEditors: your name
+ * @LastEditTime: 2019-10-04 12:03:51
+ * @LastEditors: Please set LastEditors
  -->
 <template>
-    <el-form ref="form" :model="from" label-width="80px" class="form">
+<div>
+    <el-form ref="form" :model="form" label-width="80px" class="form">
         <el-form-item label="标题">
             <el-input v-model="form.name"></el-input>
         </el-form-item>
         <el-form-item label="地点">
-            <el-input v-model="region"></el-input>
+            <el-input v-model="form.region"></el-input>
         </el-form-item>
         <el-form-item label="活动时间">
             <el-col :span="11">
@@ -30,8 +31,12 @@
             <el-button @click="home">返回</el-button>
         </el-form-item>
     </el-form>
+    <p>data:{{ data }}</p>
+</div>
 </template>
 <script>
+import axios from 'axios';
+
 export default {
     data(){
         return {
@@ -41,11 +46,17 @@ export default {
                 date:'',
                 time:'',
                 remark:''
-            }
+            },
+            data: ''
         }
     },
     methods:{
         onSubmit(){
+            let year = this.form.date.getFullYear();
+            let month = this.form.date.getMonth();
+            let date = this.form.date.getDate();
+            let id = '' + year + month +date;
+            axios.post('http://localhost:3000/', {form: this.form,id: id });
         },
         home(){
             this.$router.push({path:'/'});
