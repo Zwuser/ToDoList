@@ -7,14 +7,39 @@
  -->
 <template>
     <div class="week">
-        <btn @nextmonth='next' @premonth='pre'></btn>
-        <div>{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
-        <template v-if="events.length !== 0"><div v-for="(event,index) in events" :key="index">标题：{{event.name}}  备注：{{event.remark}}</div></template>
-        <template v-else><p>今日无事件</p></template>
+        <el-row :gutter="14">
+            <el-col :span="18">
+                <btn @nextmonth='next' @premonth='pre'></btn>
+            </el-col>
+            <el-col :span="6">
+                <el-button icon="el-icon-plus" @click="addlist" circle></el-button>
+            </el-col>
+        </el-row>
+        <div class="el-icon-time time">{{new Date().getFullYear()}}年{{new Date().getMonth() +1 }}月{{new Date().getDate()}}日</div>
+        <template v-if="events.length !== 0">
+            <!--<div v-for="(event,index) in events" :key="index">标题：{{event.name}}  备注：{{event.remark}}</div>-->
+            <el-table :data="events" height="250" border style="width: 100%">
+
+                <el-table-column label="标题" width="180">
+                    <template slot-scope="scope">
+                        <span style="margin-left:10px ">{{scope.row.name}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="备注" width="180">
+                    <template slot-scope="scope">
+                        <span style="margin-left:10px">{{scope.row.remark}}</span>
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180"> 
+                    <template slot-scope="scope">
+                        <el-button size="mini" type="danger" @click="mydelete(scope.$index)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </template>
+        <template v-else><p>今日无事件</p></template> 
         <div v-for="(date,index) in dateforCalendar" :key="'date' +index" class="date"> {{date}}</div>
         <button  v-for="(it,index) in calendarList" :key="'day' + index"  class="day" :class="[it.disable ? 'disable': '', (it.year === new Date().getFullYear() && it.month === new Date().getMonth() && it.date === new Date().getDate()) ? 'today': '']" @click="setData(it)">{{it.date}}</button>
-        <br>
-        <el-button icon="el-icon-plus" @click="addlist"></el-button> 
     </div>
     
 </template>
@@ -117,6 +142,9 @@ export default {
             let date = obj.date;
             let Date = '' + year + month + date;
             return Date;
+        },
+        mydelete(index){
+
         }
     },
     watch: {
@@ -173,6 +201,12 @@ export default {
     .today {
         border-radius: 2vw;
         background-color: cyan;
+    }
+    .el-row {
+        margin-bottom: 20px
+    }
+    .time{
+        border-radius: 30px;
     }
 </style>
 
